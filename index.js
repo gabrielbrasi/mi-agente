@@ -19,7 +19,9 @@ function saveTareas(data) {
 
 const memoria = {};
 
-const SYSTEM_PROMPT = `Eres un asistente personal de Gabriel. Eres directo, eficiente y respondes siempre en español. Cuando el usuario mencione una tarea o compromiso, usa guardar_tarea. Cuando pregunte que tiene pendiente, usa listar_tareas. Cuando quiera borrar una tarea, usa borrar_tarea.`;
+const MY_CHAT_ID = '453546731';
+
+const SYSTEM_PROMPT = `Eres un asistente experto en auditoría IT y ciberseguridad con conocimiento profundo de NIST AI RMF, EU AI Act, ISO 27001, COBIT y OWASP. Ayudas a Gabriel durante auditorías respondiendo preguntas técnicas, redactando findings, sugiriendo controles y recordando tareas pendientes. Cuando el usuario mencione una tarea o compromiso, usa guardar_tarea. Cuando pregunte que tiene pendiente, usa listar_tareas. Cuando quiera borrar una tarea, usa borrar_tarea. Respondes siempre en español y de forma concisa.`;
 
 const tools = [
   { name: "guardar_tarea", description: "Guarda una tarea pendiente", input_schema: { type: "object", properties: { tarea: { type: "string" }, fecha: { type: "string" } }, required: ["tarea"] } },
@@ -50,7 +52,11 @@ function ejecutarHerramienta(nombre, input, chatId) {
 }
 
 bot.on('message', async (msg) => {
-  const chatId = String(msg.chat.id);
+	  const chatId = String(msg.chat.id);
+	if (chatId !== MY_CHAT_ID) {
+	  bot.sendMessage(chatId, 'No autorizado.');
+	  return;
+	}
   const userText = msg.text;
   console.log(`chat_id: ${chatId} | msg: ${userText}`);
   if (!memoria[chatId]) memoria[chatId] = [];
