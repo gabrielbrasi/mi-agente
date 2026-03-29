@@ -52,6 +52,7 @@ function ejecutarHerramienta(nombre, input, chatId) {
 bot.on('message', async (msg) => {
   const chatId = String(msg.chat.id);
   const userText = msg.text;
+  console.log(`chat_id: ${chatId} | msg: ${userText}`);
   if (!memoria[chatId]) memoria[chatId] = [];
   memoria[chatId].push({ role: 'user', content: userText });
 
